@@ -3,21 +3,17 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Bulk Message Sender</title>
+<title>Auto Message Sender with Response</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
   body {
-    margin: 0;
-    padding: 0;
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #667eea, #764ba2);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 0;
   }
-
   .container {
     background: #fff;
     padding: 2.5rem 3rem;
@@ -25,24 +21,21 @@
     box-shadow: 0 15px 30px rgba(0,0,0,0.2);
     width: 360px;
     max-width: 90vw;
-  }
-
-  h2 {
     text-align: center;
+  }
+  h2 {
     color: #5b3bdb;
     margin-bottom: 1.8rem;
     letter-spacing: 1px;
   }
-
   label {
     display: block;
+    text-align: left;
     margin-bottom: 0.5rem;
     font-weight: 600;
     color: #444;
   }
-
   input[type="email"],
-  input[type="number"],
   textarea {
     width: 100%;
     padding: 12px 15px;
@@ -54,15 +47,12 @@
     outline: none;
     resize: vertical;
   }
-
   input[type="email"]:focus,
-  input[type="number"]:focus,
   textarea:focus {
     border-color: #5b3bdb;
     box-shadow: 0 0 8px rgba(91, 59, 219, 0.4);
   }
-
-  button {
+  button.toggle-btn {
     width: 100%;
     padding: 14px 0;
     background: #5b3bdb;
@@ -76,90 +66,103 @@
     transition: background 0.3s ease;
     box-shadow: 0 5px 15px rgba(91, 59, 219, 0.4);
   }
-
-  button:hover {
-    background: #4729b7;
+  button.toggle-btn.off {
+    background: #aaa;
+    box-shadow: none;
   }
-
   #status {
     margin-top: 1.6rem;
     font-weight: 600;
-    text-align: center;
     color: #333;
-    min-height: 24px;
-  }
-
-  /* Responsive for smaller devices */
-  @media (max-width: 400px) {
-    .container {
-      padding: 1.8rem 2rem;
-      width: 90vw;
-    }
+    min-height: 60px;
+    max-height: 150px;
+    overflow-y: auto;
+    text-align: left;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 0.9rem;
   }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>Bulk Message Sender</h2>
+  <h2>Auto Message Sender</h2>
 
-  <form id="bulkForm">
-    <label for="email">Enter Email:</label>
-    <input type="email" id="email" placeholder="example@gmail.com" required />
+  <label for="email">Enter Email:</label>
+  <input type="email" id="email" placeholder="example@gmail.com" required />
 
-    <label for="message">Enter Message:</label>
-    <textarea id="message" rows="4" placeholder="Type your message here..." required></textarea>
+  <label for="message">Enter Message:</label>
+  <textarea id="message" rows="4" placeholder="Type your message here..." required></textarea>
 
-    <label for="amount">Enter Amount:</label>
-    <input type="number" id="amount" min="1" max="100" value="1" required />
-
-    <button type="submit">Send Messages</button>
-  </form>
+  <button id="toggleBtn" class="toggle-btn off">OFF</button>
 
   <div id="status"></div>
 </div>
 
 <script>
-  const form = document.getElementById('bulkForm');
+  const emailInput = document.getElementById('email');
+  const messageInput = document.getElementById('message');
+  const toggleBtn = document.getElementById('toggleBtn');
   const statusDiv = document.getElementById('status');
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+  let intervalId = null;
 
-    const email = document.getElementById('email').value.trim();
-    const message = document.getElementById('message').value.trim();
-    const amount = parseInt(document.getElementById('amount').value);
+  function appendStatus(text, success = true) {
+    const time = new Date().toLocaleTimeString();
+    const color = success ? 'green' : 'crimson';
+    const line = document.createElement('div');
+    line.style.color = color;
+    line.textContent = `[${time}] ${text}`;
+    statusDiv.appendChild(line);
+    statusDiv.scrollTop = statusDiv.scrollHeight; // scroll down
+  }
 
-    if (!email || !message || !amount || amount < 1) {
-      statusDiv.textContent = 'Please fill all fields correctly.';
+  async function sendMessage() {
+    const email = emailInput.value.trim();
+    const message = messageInput.value.trim();
+
+    if (!email || !message) {
+      appendStatus('Please enter both Email and Message.', false);
       return;
     }
 
-    statusDiv.style.color = '#5b3bdb';
-    statusDiv.textContent = `Sending ${amount} messages...`;
+    const url = `https://api.epplicon.net/Api.php?email=${encodeURIComponent(email)}&message=${encodeURIComponent(message)}`;
 
-    let successCount = 0;
-    let failCount = 0;
+    try {
+      const res = await fetch(url);
+      const text = await res.text(); // raw response text
 
-    for (let i = 1; i <= amount; i++) {
-      try {
-        const url = `https://api.epplicon.net/Api.php?email=${encodeURIComponent(email)}&message=${encodeURIComponent(message)}`;
-        const response = await fetch(url);
-        if (response.ok) {
-          successCount++;
-          statusDiv.textContent = `Sent ${successCount} of ${amount} messages...`;
-        } else {
-          failCount++;
-        }
-      } catch (error) {
-        failCount++;
+      if (res.ok) {
+        appendStatus(`Success: ${text}`);
+      } else {
+        appendStatus(`Failed (status ${res.status}): ${text}`, false);
       }
+    } catch (error) {
+      appendStatus(`Error: ${error.message}`, false);
     }
+  }
 
-    statusDiv.style.color = failCount === 0 ? 'green' : 'crimson';
-    statusDiv.textContent = `Done! Successfully sent: ${successCount}, Failed: ${failCount}`;
+  toggleBtn.addEventListener('click', () => {
+    if (intervalId === null) {
+      // ON
+      intervalId = setInterval(sendMessage, 3000); // 3 seconds
+      toggleBtn.textContent = 'ON';
+      toggleBtn.classList.remove('off');
+      appendStatus('Auto sending started...', true);
+      sendMessage(); // immediately send once
+    } else {
+      // OFF
+      clearInterval(intervalId);
+      intervalId = null;
+      toggleBtn.textContent = 'OFF';
+      toggleBtn.classList.add('off');
+      appendStatus('Auto sending stopped.', true);
+    }
   });
 </script>
 
 </body>
-  </html>
+</html>
