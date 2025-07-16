@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Auto Messagese</title>
+  <title>Auto Email Sender</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -85,12 +85,12 @@
 <body>
 
 <div class="container">
-  <h2>Auto MSender</h2>
+  <h2>Auto Email Sender</h2>
 
-  <label for="email">Enter Email:</label>
+  <label for="email">Email:</label>
   <input type="email" id="email" placeholder="example@gmail.com" required />
 
-  <label for="message">Enter Message:</label>
+  <label for="message">Message:</label>
   <textarea id="message" rows="4" placeholder="Type your message here..." required></textarea>
 
   <button id="toggleBtn" class="toggle-btn off">OFF</button>
@@ -120,20 +120,21 @@
     const message = messageInput.value.trim();
 
     if (!email || !message) {
-      appendStatus('Please enter both Email and Message.', 'crimson');
+      appendStatus('❗ Please enter both Email and Message.', 'crimson');
       return;
     }
 
-    const url = `https://api.epplicon.net/Api.php?email=${encodeURIComponent(email)}&message=${encodeURIComponent(message)}`;
+    const subject = 'Hello'; // Static subject as required by API
+    const url = `https://demo-lime-chi.vercel.app/api?email=${encodeURIComponent(email)}&subject=${encodeURIComponent(subject)}&message=${encodeURIComponent(message)}`;
 
     try {
       const res = await fetch(url);
-      const json = await res.json();
+      const data = await res.json();
 
-      if (json.success) {
-        appendStatus(`✅ ${json.message}`, 'green');
+      if (data.success) {
+        appendStatus(`✅ ${data.message}`, 'green');
       } else {
-        appendStatus(`❌ ${json.message || 'Failed'}`, 'crimson');
+        appendStatus(`❌ ${data.message || 'Failed to send'}`, 'crimson');
       }
     } catch (err) {
       appendStatus(`⚠️ Error: ${err.message}`, 'crimson');
@@ -142,14 +143,12 @@
 
   toggleBtn.addEventListener('click', () => {
     if (intervalId === null) {
-      // Turn ON
-      intervalId = setInterval(sendMessage, 5000);
+      intervalId = setInterval(sendMessage, 3000); // 3s
       toggleBtn.textContent = 'ON';
       toggleBtn.classList.remove('off');
-      appendStatus('🔁 Auto sending started...', '#5b3bdb');
-      sendMessage(); // immediate first send
+      appendStatus('🟢 Auto sending started...', '#5b3bdb');
+      sendMessage(); // send immediately once
     } else {
-      // Turn OFF
       clearInterval(intervalId);
       intervalId = null;
       toggleBtn.textContent = 'OFF';
