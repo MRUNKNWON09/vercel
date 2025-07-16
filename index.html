@@ -1,90 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Auto Message Sender with Response</title>
-<style>
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-  }
-  .container {
-    background: #fff;
-    padding: 2.5rem 3rem;
-    border-radius: 15px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-    width: 360px;
-    max-width: 90vw;
-    text-align: center;
-  }
-  h2 {
-    color: #5b3bdb;
-    margin-bottom: 1.8rem;
-    letter-spacing: 1px;
-  }
-  label {
-    display: block;
-    text-align: left;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #444;
-  }
-  input[type="email"],
-  textarea {
-    width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 1.4rem;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-    outline: none;
-    resize: vertical;
-  }
-  input[type="email"]:focus,
-  textarea:focus {
-    border-color: #5b3bdb;
-    box-shadow: 0 0 8px rgba(91, 59, 219, 0.4);
-  }
-  button.toggle-btn {
-    width: 100%;
-    padding: 14px 0;
-    background: #5b3bdb;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-size: 1.15rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    box-shadow: 0 5px 15px rgba(91, 59, 219, 0.4);
-  }
-  button.toggle-btn.off {
-    background: #aaa;
-    box-shadow: none;
-  }
-  #status {
-    margin-top: 1.6rem;
-    font-weight: 600;
-    color: #333;
-    min-height: 60px;
-    max-height: 150px;
-    overflow-y: auto;
-    text-align: left;
-    background: #f9f9f9;
-    padding: 10px;
-    border-radius: 8px;
-    font-family: monospace;
-    font-size: 0.9rem;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Auto Message Sender with Response</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 2.5rem 3rem;
+      border-radius: 15px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+      width: 360px;
+      max-width: 90vw;
+      text-align: center;
+    }
+    h2 {
+      color: #5b3bdb;
+      margin-bottom: 1.8rem;
+      letter-spacing: 1px;
+    }
+    label {
+      display: block;
+      text-align: left;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #444;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 1.4rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+      outline: none;
+    }
+    input:focus, textarea:focus {
+      border-color: #5b3bdb;
+      box-shadow: 0 0 8px rgba(91, 59, 219, 0.4);
+    }
+    button.toggle-btn {
+      width: 100%;
+      padding: 14px 0;
+      background: #5b3bdb;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 1.15rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      box-shadow: 0 5px 15px rgba(91, 59, 219, 0.4);
+    }
+    button.toggle-btn.off {
+      background: #aaa;
+      box-shadow: none;
+    }
+    #status {
+      margin-top: 1.6rem;
+      font-weight: 600;
+      color: #333;
+      min-height: 60px;
+      max-height: 150px;
+      overflow-y: auto;
+      text-align: left;
+      background: #f9f9f9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
 <body>
 
@@ -110,14 +106,13 @@
 
   let intervalId = null;
 
-  function appendStatus(text, success = true) {
+  function appendStatus(text, color = 'black') {
     const time = new Date().toLocaleTimeString();
-    const color = success ? 'green' : 'crimson';
     const line = document.createElement('div');
     line.style.color = color;
     line.textContent = `[${time}] ${text}`;
     statusDiv.appendChild(line);
-    statusDiv.scrollTop = statusDiv.scrollHeight; // scroll down
+    statusDiv.scrollTop = statusDiv.scrollHeight;
   }
 
   async function sendMessage() {
@@ -125,7 +120,7 @@
     const message = messageInput.value.trim();
 
     if (!email || !message) {
-      appendStatus('Please enter both Email and Message.', false);
+      appendStatus('Please enter both Email and Message.', 'crimson');
       return;
     }
 
@@ -133,33 +128,33 @@
 
     try {
       const res = await fetch(url);
-      const text = await res.text(); // raw response text
+      const json = await res.json();
 
-      if (res.ok) {
-        appendStatus(`Success: ${text}`);
+      if (json.success) {
+        appendStatus(`✅ ${json.message}`, 'green');
       } else {
-        appendStatus(`Failed (status ${res.status}): ${text}`, false);
+        appendStatus(`❌ ${json.message || 'Failed'}`, 'crimson');
       }
-    } catch (error) {
-      appendStatus(`Error: ${error.message}`, false);
+    } catch (err) {
+      appendStatus(`⚠️ Error: ${err.message}`, 'crimson');
     }
   }
 
   toggleBtn.addEventListener('click', () => {
     if (intervalId === null) {
-      // ON
-      intervalId = setInterval(sendMessage, 3000); // 3 seconds
+      // Turn ON
+      intervalId = setInterval(sendMessage, 3000);
       toggleBtn.textContent = 'ON';
       toggleBtn.classList.remove('off');
-      appendStatus('Auto sending started...', true);
-      sendMessage(); // immediately send once
+      appendStatus('🔁 Auto sending started...', '#5b3bdb');
+      sendMessage(); // immediate first send
     } else {
-      // OFF
+      // Turn OFF
       clearInterval(intervalId);
       intervalId = null;
       toggleBtn.textContent = 'OFF';
       toggleBtn.classList.add('off');
-      appendStatus('Auto sending stopped.', true);
+      appendStatus('🛑 Auto sending stopped.', '#444');
     }
   });
 </script>
