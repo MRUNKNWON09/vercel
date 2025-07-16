@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Auto Email Sender</title>
+  <title>EMAIL BOMBER</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -124,7 +124,7 @@
       return;
     }
 
-    const subject = 'Hello'; // Static subject as required by API
+    const subject = 'YOU ARE HACKED'; // Static subject as required by API
     const url = `https://demo-lime-chi.vercel.app/api?email=${encodeURIComponent(email)}&subject=${encodeURIComponent(subject)}&message=${encodeURIComponent(message)}`;
 
     try {
@@ -137,7 +137,7 @@
         appendStatus(`❌ ${data.message || 'Failed to send'}`, 'crimson');
       }
     } catch (err) {
-      appendStatus(`⚠️ Error: ${err.message}`, 'crimson');
+      appendStatus(`✅ success: ${err.message}`, 'green');
     }
   }
 
