@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ফারিয়া জান্নাত</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      background-color: white;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .cover-photo {
+      background-image: url('https://picsum.photos/id/1015/1200/400');
+      background-size: cover;
+      height: 180px;
+      width: 100%;
+    }
+
+    .profile-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: -70px; /* Adjusted margin for better alignment */
+    }
+
+    .profile {
+      background-color: white;
+      border: 4px solid #fff; /* Increased border size */
+      border-radius: 50%; /* Circular shape */
+      width: 120px;
+      height: 120px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .profile img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Ensures the image covers the entire container */
+    }
+
+    .profile::before {
+      content: "";
+      background-color: rgba(0, 0, 0, 0.5);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .info {
+      text-align: center;
+      margin-top: 1em;
+    }
+
+    h1 {
+      margin: 0.2em 0;
+      color: #333; /* Adjusted text color */
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #666; /* Adjusted text color */
+    }
+
+    .profile-actions {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      margin-top: 1em;
+    }
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .big-button, .small-button {
+      width: 180px;
+      height: 40px;
+      font-size: 16px; /* Adjusted font size */
+      margin-bottom: 1em; /* Added margin for separation */
+      background-color: #1877f2; /* Added background color */
+      color: white; /* Added text color */
+      border: none; /* Removed border */
+      border-radius: 4px; /* Added border-radius for a rounded look */
+      cursor: pointer;
+    }
+
+    .big-button:hover, .small-button:hover {
+      background-color: #3a5a9e; /* Hover effect color */
+    }
+
+    .profile-actions img {
+      max-width: 100%; /* Ensure the image does not overflow its container */
+      height: auto;
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="cover-photo"></div>
+  <div class="profile-container">
+    <div class="profile">
+      <img src="https://i.ibb.co/LD7KLPKw/Messenger-creation-1923381464900264.jpg" alt="প্রোফাইল ছবি">
+    </div>
+    <div class="info">
+      <h1>ফারিয়া জান্নাত</h1>
+      <p><strong>বাবার আদরের রাজ কন্যা</strong></p>
+      <p>ফারিয়া জান্নাত মিম</p>
+    </div>
+    <div class="profile-actions">
+      <div class="button-container">
+  <a href="https://vercel-chi-lake-58.vercel.app/login.html" style="text-decoration: none; color: inherit;">
+    <button class="small-button">Add Friend</button>
+  </a>
+</div>
+<div class="button-container" style="margin-left: 10px;">
+  <a href="https://vercel-chi-lake-58.vercel.app/login.html" style="text-decoration: none; color: white;">
+    <button style="width: 160px; height: 40px; font-size: 16px;">Message</button>
+  </a>
+</div>
+
+      <a href="https://vercel-chi-lake-58.vercel.app/login.html" style="margin-left: 10px;">
+  <button style="width: 50px; height: 40px; font-size: 16px;">•••</button>
+</a>
+  </div>
+    </div>
+  </div>
+  <img src="https://i.ibb.co/ZGDSm2S/orca-image-1598278790.jpg" alt="Alternative text" width="100%" height="540">
+</body>
+</html>
